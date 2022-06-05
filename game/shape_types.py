@@ -83,6 +83,34 @@ circle = graphics.Type("circle", draw_circle, move=move_circle)
 graphics.add_type(circle)
 
 
+# points need have a three arguments (x, y, z) unless it is real
+def change_to_polygon(shape, color, points, real=False):
+    shape.color = color
+    shape.points = points
+    shape.real = real
+
+
+def draw_polygon(self):
+    if self.real:
+        pygame.draw.polygon(self.game_graphics.screen.screen, self.color, self.points)
+        return None
+    new_points = []
+    for point in self.points:
+        new_points.append(self.game_graphics.camera.vr_to_real(point, point[2]))
+    pygame.draw.polygon(self.game_graphics.screen.screen, self.color, new_points)
+
+
+# movement: (x, y, z)
+def move_polygon(self, movement):
+    for i in range(len(self.points)):
+        point = self.points[i]
+        self.points[i] = (point[0] + movement[0], point[1] + movement[1], point[2] + movement[2])
+
+
+polygon = graphics.Type("polygon", draw_polygon, move=move_polygon)
+graphics.add_type(polygon)
+
+
 # position: (x, y, z) back top left corner, dimensions (left to right, top to down, back to front)
 def change_to_cube(shape, color, position, dimensions):
     shape.color = color
@@ -93,12 +121,18 @@ def change_to_cube(shape, color, position, dimensions):
 
     # back
     s1 = graphics.Shape(shape.game_graphics, square)
-    change_to_square(s1, (255, 255, 255), ([position[0], position[1]], 25, 50, 50))
+    change_to_square(s1, (255, 255, 255), (position[0], position[1], dimensions[0], dimensions[1], position[2]))
     shape.squares.append(s1)
 
     # top
+    s1 = graphics.Shape(shape.game_graphics, square)
+    change_to_square(s1, (255, 255, 255), (position[0], position[1], dimensions[0], dimensions[1], position[2]))
+    shape.squares.append(s1)
 
     # right
+    s3 = graphics.Shape(shape.game_graphics, square)
+    change_to_square(s3, (255, 255, 255), (position[0], position[1], dimensions[0], dimensions[1], position[2]))
+    shape.squares.append(s3)
 
     # left
 
