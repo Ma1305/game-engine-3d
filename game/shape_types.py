@@ -3,6 +3,7 @@ import graphics as graphics
 import math
 
 
+# rect needs to have a 5th argument for z position unless it is real
 def change_to_square(shape, color, rect, real=False):
     shape.color = color
     shape.rect = rect
@@ -13,9 +14,13 @@ def draw_square(self):
     if self.real:
         pygame.draw.rect(self.game_graphics.screen.screen, self.color, self.rect)
         return None
-    pos = self.game_graphics.camera.vr_to_real((self.rect[0], self.rect[1]))
-    w = self.game_graphics.camera.zoom*self.rect[2]
-    h = self.game_graphics.camera.zoom*self.rect[3]
+    pos = self.game_graphics.camera.vr_to_real((self.rect[0], self.rect[1]), z=self.rect[4])
+    distance = self.rect[4] - self.game_graphics.camera.z
+    if distance <= 0:
+        return False
+    magnify = self.game_graphics.camera.original_at/distance
+    w = magnify*self.rect[2]
+    h = magnify*self.rect[3]
     pygame.draw.rect(self.game_graphics.screen.screen, self.color, (pos[0], pos[1], w, h))
 
 
@@ -76,3 +81,40 @@ def move_circle(self, movement):
 
 circle = graphics.Type("circle", draw_circle, move=move_circle)
 graphics.add_type(circle)
+
+
+# position: (x, y, z) back top left corner, dimensions (left to right, top to down, back to front)
+def change_to_cube(shape, color, position, dimensions):
+    shape.color = color
+    shape.position = position
+    shape.dimensions = dimensions
+
+    shape.squares = []
+
+    # back
+    s1 = graphics.Shape(shape.game_graphics, square)
+    change_to_square(s1, (255, 255, 255), ([position[0], position[1]], 25, 50, 50))
+    shape.squares.append(s1)
+
+    # top
+
+    # right
+
+    # left
+
+    # front
+
+
+def draw_cube(self):
+
+    # back
+
+    # top
+
+    # right
+
+    # left
+
+    # front
+
+    pass

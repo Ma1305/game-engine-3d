@@ -92,25 +92,34 @@ class GameGraphics:
 
 
 class Camera:
-    def __init__(self, x, y, zoom, game_graphics):
+    def __init__(self, x, y, z, game_graphics, original_at=1):
         self.x = x
         self.y = y
-        self.zoom = zoom
+        self.z = z
         self.game_graphics = game_graphics
+        self.original_at = original_at
 
     def move(self, move):
         self.x += move[0]
         self.y += move[1]
 
-    def get_origin(self):
+    def get_origin(self, z):
         center = self.game_graphics.center
+        distant = z - self.z
+        if distant <= 0:
+            return False
+        magnify = self.original_at/distant
         point = (-self.x, -self.y)
-        point = (self.zoom*point[0], self.zoom*point[1])
+        point = (magnify*point[0], magnify*point[1])
         return center[0]+point[0], center[1]-point[1]
 
-    def vr_to_real(self, point):
-        origin = self.get_origin()
-        point = (self.zoom*point[0], self.zoom*point[1])
+    def vr_to_real(self, point, z=0):
+        distant = z - self.z
+        if distant <= 0:
+            return False
+        magnify = self.original_at/distant
+        origin = self.get_origin(z)
+        point = (magnify*point[0], magnify*point[1])
         return origin[0]+point[0], origin[1]-point[1]
 
 
