@@ -6,3 +6,4 @@ def lcm(a, b):
     print(math.gcd(a, b))
     return int((a*b)/math.gcd(a, b))
 
+

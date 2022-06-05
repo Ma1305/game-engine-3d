@@ -113,12 +113,12 @@ class Camera:
         point = (magnify*point[0], magnify*point[1])
         return center[0]+point[0], center[1]-point[1]
 
-    def vr_to_real(self, point, z=0):
-        distant = z - self.z
+    def vr_to_real(self, point):
+        distant = point[2] - self.z
         if distant <= 0:
             return False
         magnify = self.original_at/distant
-        origin = self.get_origin(z)
+        origin = self.get_origin(point[2])
         point = (magnify*point[0], magnify*point[1])
         return origin[0]+point[0], origin[1]-point[1]
 
