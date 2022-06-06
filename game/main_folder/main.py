@@ -18,7 +18,7 @@ game_graphics.name = "first"
 manager.game_loop.make_screen(1000, 700)
 manager.game_loop.set_main_game_graphics(game_graphics)
 
-'''# creating squares
+# creating squares
 s1 = graphics.Shape(game_graphics, square)
 change_to_square(s1, (255, 255, 255), (-500, 25, 250, 50, 0))
 game_graphics.add_shape(s1)
@@ -26,17 +26,17 @@ game_graphics.add_shape(s1)
 # creating polygon
 p1 = graphics.Shape(game_graphics, polygon)
 change_to_polygon(p1, (200, 100, 0), [(0, 0, 0), (50, 0, 0), (50, 0, 50), (0, 0, 50)])
-game_graphics.add_shape(p1)'''
+game_graphics.add_shape(p1)
 
 # creating cube
 c1 = graphics.Shape(game_graphics, cube)
 change_to_cube(c1, (100, 0, 100), (100, 60, 20), (200, 100, 50))
 game_graphics.add_shape(c1)
 
-'''# line formula
+# line formula
 lf1 = graphics.Shape(game_graphics, line_formula)
-change_to_line_formula(lf1, (255, 200, 100), 0, 100, "20*sin(0.5*x)+0.1*(x**2)", "0.1*(x**2)", 1, width=5)
-game_graphics.add_shape(lf1)'''
+change_to_line_formula(lf1, (255, 200, 100), -600, 600, "20*sin(0.5*x)+0.01*(x**2)", "0.01*(x**2)", 1, width=5)
+game_graphics.add_shape(lf1)
 
 
 '''
