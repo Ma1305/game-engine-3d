@@ -15,7 +15,10 @@ def change_to_square(shape, color, rect, real=False):
 
 def draw_square(self):
     if self.real:
-        pygame.draw.rect(self.game_graphics.screen.screen, self.color, self.rect)
+        rect = pygame.Rect(self.rect)
+        if rect.right < 0 or rect.left > self.game_graphics.screen.width or rect.bottom < 0 or rect.top > self.game_graphics.screen.height:
+            return False
+        pygame.draw.rect(self.game_graphics.screen.screen, self.color, rect)
         return None
     pos = self.game_graphics.camera.vr_to_real((self.rect[0], self.rect[1], self.rect[4]))
     distance = self.rect[4] - self.game_graphics.camera.z
@@ -24,7 +27,10 @@ def draw_square(self):
     magnify = self.game_graphics.camera.original_at/distance
     w = magnify*self.rect[2]
     h = magnify*self.rect[3]
-    pygame.draw.rect(self.game_graphics.screen.screen, self.color, (pos[0], pos[1], w, h))
+    rect = pygame.Rect((pos[0], pos[1], w, h))
+    if rect.right < 0 or rect.left > self.game_graphics.screen.width or rect.bottom < 0 or rect.top > self.game_graphics.screen.height:
+        return False
+    pygame.draw.rect(self.game_graphics.screen.screen, self.color, rect)
 
 
 def move_square(self, movement):
@@ -353,7 +359,6 @@ def draw_polygon(self):
         counter += 1
 
     correct_points = better_points
-    print(correct_points)
 
     if len(correct_points) >= 3:
         pygame.draw.polygon(self.game_graphics.screen.screen, self.color, correct_points)
