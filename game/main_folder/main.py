@@ -12,6 +12,7 @@ camera = graphics.Camera(0, 10, -400, game_graphics, original_at=400)
 game_graphics.camera = camera
 graphics.add_game_graphics(game_graphics)
 
+
 game_graphics.name = "first"
 
 # setting up the screen and main graphics
@@ -19,14 +20,18 @@ manager.game_loop.make_screen(1000, 700)
 manager.game_loop.set_main_game_graphics(game_graphics)
 
 # creating squares
-s1 = graphics.Shape(game_graphics, square)
+'''s1 = graphics.Shape(game_graphics, square)
 change_to_square(s1, (255, 255, 255), (-500, 25, 250, 50, 0))
-game_graphics.add_shape(s1)
+game_graphics.add_shape(s1)'''
 
 # creating polygon
 p1 = graphics.Shape(game_graphics, polygon)
 change_to_polygon(p1, (200, 100, 0), [(0, 0, 0), (50, 0, 0), (50, 0, 50), (0, 0, 50)])
 game_graphics.add_shape(p1)
+
+p2 = graphics.Shape(game_graphics, polygon)
+change_to_polygon(p2, (200, 100, 0), [(-500, 25, 0), (-250, 25, 0), (-250, 75, 50), (-500, 75, 50)])
+game_graphics.add_shape(p2)
 
 # creating cube
 c1 = graphics.Shape(game_graphics, cube)
@@ -77,6 +82,16 @@ def move_screen():
         camera.move((0, speed))
     if keys[pygame.K_DOWN]:
         camera.move((0, -speed))
+
+    if keys[pygame.K_a]:
+        camera.y_rotation += 5
+    if keys[pygame.K_d]:
+        camera.y_rotation -= 5
+
+    if keys[pygame.K_w]:
+        camera.x_rotation -= 5
+    if keys[pygame.K_s]:
+        camera.x_rotation += 5
 
 
 move_screen_looper = ui.Looper("move screen", move_screen)

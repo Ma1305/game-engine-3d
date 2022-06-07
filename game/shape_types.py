@@ -57,6 +57,7 @@ def draw_line(self):
     start_point = self.game_graphics.camera.vr_to_real(self.start_point)
     end_point = self.game_graphics.camera.vr_to_real(self.end_point)
     distance = (self.start_point[2] + self.end_point[2])/2 - self.game_graphics.camera.z
+
     if not end_point and start_point:
         try:
             z_slope = (self.start_point[2] - self.end_point[2])/(self.start_point[0] - self.end_point[0])
@@ -77,7 +78,8 @@ def draw_line(self):
         end_point = (x, y, z)
         end_point = self.game_graphics.camera.vr_to_real(end_point)
 
-    elif not start_point and end_point:
+    if not start_point and end_point:
+        print(self.start_point, self.end_point)
         try:
             z_slope = (self.start_point[2] - self.end_point[2]) / (self.start_point[0] - self.end_point[0])
             z_b = self.start_point[2] - (self.start_point[0] * z_slope)
@@ -95,9 +97,11 @@ def draw_line(self):
             y = self.start_point[1]
 
         start_point = (x, y, z)
+        print(start_point)
         start_point = self.game_graphics.camera.vr_to_real(start_point)
+        print(start_point)
 
-    if distance <= 0 or (not start_point and not end_point):
+    if distance <= 0 or (not start_point or not end_point):
         return False
 
     magnify = self.game_graphics.camera.original_at / distance

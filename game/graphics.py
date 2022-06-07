@@ -92,10 +92,13 @@ class GameGraphics:
 
 
 class Camera:
-    def __init__(self, x, y, z, game_graphics, original_at=1):
+    def __init__(self, x, y, z, game_graphics, original_at=1, x_rotation=0, y_rotation=0, z_rotation=0):
         self.x = x
         self.y = y
         self.z = z
+        self.x_rotation = x_rotation
+        self.y_rotation = y_rotation
+        self.z_rotation = z_rotation
         self.game_graphics = game_graphics
         self.original_at = original_at
 
@@ -103,9 +106,15 @@ class Camera:
         self.x += move[0]
         self.y += move[1]
 
-    def get_origin(self, z):
+    def get_origin(self, point):
         center = self.game_graphics.center
-        distant = z - self.z
+
+        #d1 = math.calculate_parallel_distant((self.x, self.z), (point[0], point[2]), self.y_rotation)
+        #d2 = math.calculate_parallel_distant((self.z, self.y), point, self.x_rotation)
+        #d3 = math.calculate_parallel_distant((self.x, self.y), point, self.z_rotation)
+        #distant = math.math.sqrt((d1 ** 2) + (d2 ** 2) + (d3 ** 2))
+        distant = point[2] - self.z
+        #distant = d1
         if distant <= 0:
             return False
         magnify = self.original_at/distant
@@ -114,12 +123,34 @@ class Camera:
         return center[0]+point[0], center[1]-point[1]
 
     def vr_to_real(self, point):
+
+        printIt = False
+        if point == (0, 0, 10):
+            printIt = True
+
+        '''z, y = math.rotate_point((point[2], point[1]), -self.x_rotation)
+        point = [point[0], y, z]
+
+        z, x = math.rotate_point((point[2], point[0]), -self.y_rotation)
+        point = [x, point[1], z]
+
+        x, y = math.rotate_point((point[0], point[1]), -self.z_rotation)
+        point = [x, y, point[2]]'''
+
+        #d1 = math.calculate_parallel_distant((self.x, self.z), (point[0], point[2]), self.y_rotation)
+        #d2 = math.calculate_parallel_distant((self.z, self.y), point, self.x_rotation)
+        #d3 = math.calculate_parallel_distant((self.x, self.y), point, self.z_rotation)
+        #distant = math.math.sqrt((d1 ** 2) + (d2 ** 2) + (d3 ** 2))
         distant = point[2] - self.z
+        #distant = d1
+        print(distant, (self.z, self.x), (point[2], point[0]), self.y_rotation)
+        origin = self.get_origin(point)
+
         if distant <= 0:
             return False
         magnify = self.original_at/distant
-        origin = self.get_origin(point[2])
         point = (magnify*point[0], magnify*point[1])
+
         return origin[0]+point[0], origin[1]-point[1]
 
 
