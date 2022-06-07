@@ -515,3 +515,52 @@ def draw_line_formula(self):
 
 line_formula = graphics.Type("line formula", draw_line_formula)
 graphics.add_type(line_formula)
+
+
+def change_to_terrain(shape, color, position, width, length, y_formula, accuracy):
+    shape.color = color
+    shape.position = position
+    shape.width = width
+    shape.length = length
+    shape.y_formula = y_formula
+    shape.accuracy = accuracy
+
+    shape.polygons = []
+
+    for x in range(position[0], (position[0]+width)-accuracy, accuracy):
+        for z in range(position[2], (position[2]+length)-accuracy, accuracy):
+            y_code = parser.expr(y_formula).compile()
+            y = position[1] + eval(y_code)
+            point1 = [x, y, z]
+
+            x += accuracy
+            y = position[1] + eval(y_code)
+            point2 = [x, y, z]
+
+            z += accuracy
+            y = position[1] + eval(y_code)
+            point3 = [x, y, z]
+
+            x -= accuracy
+            y = position[1] + eval(y_code)
+            point4 = [x, y, z]
+
+            z -= accuracy
+
+            # print(point1, point2, point3, point4)
+
+            p = graphics.Shape(shape.game_graphics, polygon)
+            shade = ((length-(z-position[2]))/(length-accuracy))
+            change_to_polygon(p, (color[0]*shade, color[1]*shade, color[2]*shade), [point1, point2, point3, point4])
+            shape.polygons.append(p)
+
+
+def draw_terrain(self):
+    counter = 0
+    for poly in self.polygons:
+        counter += 1
+        self.polygons[-counter].draw()
+
+
+terrain = graphics.Type("terrain", draw_terrain)
+graphics.add_type(terrain)

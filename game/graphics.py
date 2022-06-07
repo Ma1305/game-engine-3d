@@ -143,7 +143,7 @@ class Camera:
         #distant = math.math.sqrt((d1 ** 2) + (d2 ** 2) + (d3 ** 2))
         distant = point[2] - self.z
         #distant = d1
-        print(distant, (self.z, self.x), (point[2], point[0]), self.y_rotation)
+        #print(distant, (self.z, self.x), (point[2], point[0]), self.y_rotation)
         origin = self.get_origin(point)
 
         if distant <= 0:

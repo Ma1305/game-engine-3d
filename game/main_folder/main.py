@@ -8,9 +8,10 @@ import user_input as ui
 # setting up a game_graphics
 screen = graphics.Screen(1000, 700)
 game_graphics = graphics.GameGraphics(screen, None)
-camera = graphics.Camera(0, 10, -400, game_graphics, original_at=400)
+camera = graphics.Camera(-150, 200, -400, game_graphics, original_at=400)
 game_graphics.camera = camera
 graphics.add_game_graphics(game_graphics)
+game_graphics.background_color = (200, 200, 200)
 
 
 game_graphics.name = "first"
@@ -29,9 +30,14 @@ p1 = graphics.Shape(game_graphics, polygon)
 change_to_polygon(p1, (200, 100, 0), [(0, 0, 0), (50, 0, 0), (50, 0, 50), (0, 0, 50)])
 game_graphics.add_shape(p1)
 
-p2 = graphics.Shape(game_graphics, polygon)
+'''p2 = graphics.Shape(game_graphics, polygon)
 change_to_polygon(p2, (200, 100, 0), [(-500, 25, 0), (-250, 25, 0), (-250, 75, 50), (-500, 75, 50)])
-game_graphics.add_shape(p2)
+game_graphics.add_shape(p2)'''
+
+# creating terrain
+t = graphics.Shape(game_graphics, terrain)
+change_to_terrain(t, (0, 200, 0), (-700, 0, -100), 600, 400, "10*math.sin(0.04*(x))+20*math.sin(0.01*x)+10*math.sin(0.05*z)+50+20*math.sin(0.01*z)", 15)
+game_graphics.add_shape(t)
 
 # creating cube
 c1 = graphics.Shape(game_graphics, cube)
