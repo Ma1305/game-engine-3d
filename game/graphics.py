@@ -128,14 +128,14 @@ class Camera:
         if point == (0, 0, 10):
             printIt = True
 
-        '''z, y = math.rotate_point((point[2], point[1]), -self.x_rotation)
+        z, y = math.rotate_point((point[2], point[1]), -self.x_rotation, rotation_center=(self.z, self.y))
         point = [point[0], y, z]
 
-        z, x = math.rotate_point((point[2], point[0]), -self.y_rotation)
+        z, x = math.rotate_point((point[2], point[0]), -self.y_rotation, rotation_center=(self.z, self.x))
         point = [x, point[1], z]
 
-        x, y = math.rotate_point((point[0], point[1]), -self.z_rotation)
-        point = [x, y, point[2]]'''
+        x, y = math.rotate_point((point[0], point[1]), -self.z_rotation, rotation_center=(self.x, self.y))
+        point = [x, y, point[2]]
 
         #d1 = math.calculate_parallel_distant((self.x, self.z), (point[0], point[2]), self.y_rotation)
         #d2 = math.calculate_parallel_distant((self.z, self.y), point, self.x_rotation)

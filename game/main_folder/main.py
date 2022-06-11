@@ -11,7 +11,7 @@ game_graphics = graphics.GameGraphics(screen, None)
 camera = graphics.Camera(-150, 200, -400, game_graphics, original_at=400)
 game_graphics.camera = camera
 graphics.add_game_graphics(game_graphics)
-game_graphics.background_color = (200, 200, 200)
+# game_graphics.background_color = (200, 200, 200)
 
 
 game_graphics.name = "first"
@@ -35,11 +35,16 @@ change_to_polygon(p2, (200, 100, 0), [(-500, 25, 0), (-250, 25, 0), (-250, 75, 5
 game_graphics.add_shape(p2)'''
 
 # creating terrain
-t = graphics.Shape(game_graphics, terrain)
-change_to_terrain(t, (0, 200, 0), (-700, 0, -100), 600, 400, "10*math.sin(0.04*(x))+20*math.sin(0.01*x)+10*math.sin(0.05*z)+50+20*math.sin(0.01*z)", 15)
-game_graphics.add_shape(t)
+t1 = graphics.Shape(game_graphics, terrain)
+change_to_terrain(t1, (0, 200, 0), (-400, 100, 0), 200, 200, "math.sqrt(-(((x-100)**2+(z-100)**2)-10000))", 5)
+game_graphics.add_shape(t1)
 
-# creating cube
+
+'''t2 = graphics.Shape(game_graphics, terrain)
+change_to_terrain(t2, (0, 200, 0), (-400, 100, 0), 200, 200, "-math.sqrt(-(((x-100)**2+(z-100)**2)-10000))", 3)
+game_graphics.add_shape(t2)'''
+
+'''# creating cube
 c1 = graphics.Shape(game_graphics, cube)
 change_to_cube(c1, (100, 0, 100), (100, 60, 20), (200, 100, 50))
 game_graphics.add_shape(c1)
@@ -47,7 +52,7 @@ game_graphics.add_shape(c1)
 # line formula
 lf1 = graphics.Shape(game_graphics, line_formula)
 change_to_line_formula(lf1, (255, 200, 100), -600, 600, "20*sin(0.5*x)+0.01*(x**2)", "0.01*(x**2)", 1, width=5)
-game_graphics.add_shape(lf1)
+game_graphics.add_shape(lf1)'''
 
 
 '''
@@ -55,7 +60,7 @@ s2 = graphics.Shape(game_graphics, square)
 change_to_square(s2, (255, 255, 255), (400, 100, 50, 50))
 game_graphics.add_shape(s2)'''
 
-# creating axis
+'''# creating axis
 y_axis = graphics.Shape(game_graphics, line)
 change_to_line(y_axis, (0, -100000, 0), (0, 100000, 0), (163, 85, 39))
 game_graphics.add_shape(y_axis)
@@ -66,7 +71,7 @@ game_graphics.add_shape(x_axis)
 
 z_axis = graphics.Shape(game_graphics, line)
 change_to_line(z_axis, (0, 0, -1000), (0, 0, 1000), (163, 85, 39))
-game_graphics.add_shape(z_axis)
+game_graphics.add_shape(z_axis)'''
 
 
 # moving screen with mouse
@@ -98,6 +103,11 @@ def move_screen():
         camera.x_rotation -= 5
     if keys[pygame.K_s]:
         camera.x_rotation += 5
+
+    if keys[pygame.K_q]:
+        camera.z_rotation += 5
+    if keys[pygame.K_e]:
+        camera.z_rotation -= 5
 
 
 move_screen_looper = ui.Looper("move screen", move_screen)

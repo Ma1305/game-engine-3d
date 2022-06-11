@@ -79,7 +79,7 @@ def draw_line(self):
         end_point = self.game_graphics.camera.vr_to_real(end_point)
 
     if not start_point and end_point:
-        print(self.start_point, self.end_point)
+        #print(self.start_point, self.end_point)
         try:
             z_slope = (self.start_point[2] - self.end_point[2]) / (self.start_point[0] - self.end_point[0])
             z_b = self.start_point[2] - (self.start_point[0] * z_slope)
@@ -97,9 +97,9 @@ def draw_line(self):
             y = self.start_point[1]
 
         start_point = (x, y, z)
-        print(start_point)
+        #print(start_point)
         start_point = self.game_graphics.camera.vr_to_real(start_point)
-        print(start_point)
+        #print(start_point)
 
     if distance <= 0 or (not start_point or not end_point):
         return False
@@ -267,29 +267,32 @@ def draw_polygon(self):
         x = None
         y = None
 
+        if not point:
+            continue
+
         if point[0] < 0:
             x = 0
-            if previous[0] > self.game_graphics.screen.width:
+            if not previous or previous[0] > self.game_graphics.screen.width:
                 ignore_pre = True
-            if after[0] > self.game_graphics.screen.width:
+            if not after or after[0] > self.game_graphics.screen.width:
                 ignore_after = True
         elif point[0] > self.game_graphics.screen.width:
             x = self.game_graphics.screen.width
-            if previous[0] < 0:
+            if not previous or previous[0] < 0:
                 ignore_pre = True
-            if after[0] < 0:
+            if not after or after[0] < 0:
                 ignore_after = True
         elif point[1] < 0:
             y = 0
-            if previous[1] > self.game_graphics.screen.height:
+            if not previous or previous[1] > self.game_graphics.screen.height:
                 ignore_pre = True
-            if after[1] > self.game_graphics.screen.height:
+            if not after or after[1] > self.game_graphics.screen.height:
                 ignore_after = True
         elif point[1] > self.game_graphics.screen.height:
             y = self.game_graphics.screen.height
-            if previous[1] < 0:
+            if not previous or previous[1] < 0:
                 ignore_pre = True
-            if after[1] < 0:
+            if not after or after[1] < 0:
                 ignore_after = True
         else:
             better_points.append(point)
@@ -297,7 +300,7 @@ def draw_polygon(self):
             continue
 
         if not y and y != 0:
-            if not ((previous[0] < 0 or previous[0] > self.game_graphics.screen.width) or (previous[1] < 0 or previous[1] > self.game_graphics.screen.height)) or ignore_pre:
+            if previous and (not ((previous[0] < 0 or previous[0] > self.game_graphics.screen.width) or (previous[1] < 0 or previous[1] > self.game_graphics.screen.height)) or ignore_pre):
                 try:
                     slope1 = (point[1] - previous[1]) / (point[0] - previous[0])
                     b1 = point[1] - point[0] * slope1
@@ -318,7 +321,7 @@ def draw_polygon(self):
             if new_point:
                 better_points.append(new_point)
 
-            if not ((after[0] < 0 or after[0] > self.game_graphics.screen.width) or (after[1] < 0 or after[1] > self.game_graphics.screen.height)) or ignore_after:
+            if after and (not ((after[0] < 0 or after[0] > self.game_graphics.screen.width) or (after[1] < 0 or after[1] > self.game_graphics.screen.height)) or ignore_after):
                 try:
                     slope2 = (point[1] - after[1]) / (point[0] - after[0])
                     b2 = point[1] - point[0] * slope2
@@ -329,7 +332,7 @@ def draw_polygon(self):
                 better_points.append(point2)
 
         elif not x and x != 0:
-            if not ((previous[0] < 0 or previous[0] > self.game_graphics.screen.width) or (previous[1] < 0 or previous[1] > self.game_graphics.screen.height)) or ignore_pre:
+            if previous and (not ((previous[0] < 0 or previous[0] > self.game_graphics.screen.width) or (previous[1] < 0 or previous[1] > self.game_graphics.screen.height)) or ignore_pre):
                 try:
                     slope1 = (point[0] - previous[0]) / (point[1] - previous[1])
                     b1 = point[0] - point[1] * slope1
@@ -350,7 +353,7 @@ def draw_polygon(self):
             if new_point:
                 better_points.append(new_point)
 
-            if not ((after[0] < 0 or after[0] > self.game_graphics.screen.width) or (after[1] < 0 or after[1] > self.game_graphics.screen.height)) or ignore_after:
+            if after and (not ((after[0] < 0 or after[0] > self.game_graphics.screen.width) or (after[1] < 0 or after[1] > self.game_graphics.screen.height)) or ignore_after):
                 try:
                     slope2 = (point[0] - after[0]) / (point[1] - after[1])
                     b2 = point[0] - point[1] * slope2
@@ -527,32 +530,35 @@ def change_to_terrain(shape, color, position, width, length, y_formula, accuracy
 
     shape.polygons = []
 
-    for x in range(position[0], (position[0]+width)-accuracy, accuracy):
-        for z in range(position[2], (position[2]+length)-accuracy, accuracy):
-            y_code = parser.expr(y_formula).compile()
-            y = position[1] + eval(y_code)
-            point1 = [x, y, z]
+    for x in range(0, width-accuracy, accuracy):
+        for z in range(0, length-accuracy, accuracy):
+            try:
+                y_code = parser.expr(y_formula).compile()
+                y = position[1] + eval(y_code)
+                point1 = [x+position[0], y+position[1], z+position[2]]
 
-            x += accuracy
-            y = position[1] + eval(y_code)
-            point2 = [x, y, z]
+                x += accuracy
+                y = position[1] + eval(y_code)
+                point2 = [x+position[0], y+position[1], z+position[2]]
 
-            z += accuracy
-            y = position[1] + eval(y_code)
-            point3 = [x, y, z]
+                z += accuracy
+                y = position[1] + eval(y_code)
+                point3 = [x+position[0], y+position[1], z+position[2]]
 
-            x -= accuracy
-            y = position[1] + eval(y_code)
-            point4 = [x, y, z]
+                x -= accuracy
+                y = position[1] + eval(y_code)
+                point4 = [x+position[0], y+position[1], z+position[2]]
 
-            z -= accuracy
+                z -= accuracy
 
-            # print(point1, point2, point3, point4)
+                # print(point1, point2, point3, point4)
 
-            p = graphics.Shape(shape.game_graphics, polygon)
-            shade = ((length-(z-position[2]))/(length-accuracy))
-            change_to_polygon(p, (color[0]*shade, color[1]*shade, color[2]*shade), [point1, point2, point3, point4])
-            shape.polygons.append(p)
+                p = graphics.Shape(shape.game_graphics, polygon)
+                shade = ((length-z)/(length-accuracy))
+                change_to_polygon(p, (color[0]*shade, color[1]*shade, color[2]*shade), [point1, point2, point3, point4])
+                shape.polygons.append(p)
+            except ValueError:
+                pass
 
 
 def draw_terrain(self):
