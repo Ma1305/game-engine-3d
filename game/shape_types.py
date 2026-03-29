@@ -1,7 +1,6 @@
 import pygame
 import graphics as graphics
 import math
-import parser
 from math import *
 import time
 
@@ -500,8 +499,8 @@ def change_to_line_formula(shape, color, start_x, end_x, y_formula, z_formula, a
     shape.lines = []
     for i in range(start_x, end_x, accuracy):
         x = start_x + i
-        y_code = parser.expr(y_formula).compile()
-        z_code = parser.expr(z_formula).compile()
+        y_code = compile(y_formula, '<string>', 'eval')
+        z_code = compile(z_formula, '<string>', 'eval')
         start_pos = (x, eval(y_code), eval(z_code))
         x = start_x + i + accuracy
         end_pos = (x, eval(y_code), eval(z_code))
@@ -533,7 +532,7 @@ def change_to_terrain(shape, color, position, width, length, y_formula, accuracy
     for x in range(0, width-accuracy, accuracy):
         for z in range(0, length-accuracy, accuracy):
             try:
-                y_code = parser.expr(y_formula).compile()
+                y_code = compile(y_formula, '<string>', 'eval')
                 y = position[1] + eval(y_code)
                 point1 = [x+position[0], y+position[1], z+position[2]]
 

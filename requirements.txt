@@ -1,0 +1,4 @@
+pygame
+Flask
+Flask-SocketIO
+python-socketio
